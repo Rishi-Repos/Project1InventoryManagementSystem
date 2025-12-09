@@ -24,7 +24,7 @@ CREATE TABLE library_book(
 );
 
 --global serial number, unique identifier for every single physical book
---status = available, checked out, lost, overdue
+--status can be: {available, checked out, lost, overdue}
 CREATE TABLE serialNum(
 	serialNum INT SERIAL PRIMARY KEY,
 	book_id INT NOT NULL REFERENCES book(book_id),

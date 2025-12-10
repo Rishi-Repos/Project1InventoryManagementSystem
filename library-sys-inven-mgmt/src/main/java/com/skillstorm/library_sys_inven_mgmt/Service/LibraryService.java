@@ -1,7 +1,10 @@
 package com.skillstorm.library_sys_inven_mgmt.Service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Repository.LibraryRepository;
 
 @Service
@@ -11,4 +14,20 @@ public class LibraryService {
     public LibraryService(LibraryRepository libraryRepository){
         this.libraryRepository = libraryRepository;
     }
+
+    //Persist a new library
+    public Library addLibrary(Library library){
+        return libraryRepository.save(library);
+    }
+
+    //List all persisted libraries
+    public List<Library> findAllLibraries(){
+        return libraryRepository.findAll();
+    }
+
+    public Library updateLibrary(Library library){
+        return libraryRepository.save(library);
+    }
+
+
 }

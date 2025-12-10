@@ -1,0 +1,22 @@
+*{
+    background-color: #2e2e2e;
+    color: white;
+}
+.site-header{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+}
+.header-logo{
+    height: 50px;
+    width: auto;
+}
+h1{
+    padding: 10px;
+    font-size: larger;
+}
+.navbar{
+    background-color: #575757;
+    padding: 20px; /* this isn't working... */
+}

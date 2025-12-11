@@ -2,6 +2,8 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -43,6 +45,7 @@ public class Author {
         inverseJoinColumns=
             @JoinColumn(name="title_id")
     )
+    @JsonIgnore
     private Set<Title> titles;
 
     /**

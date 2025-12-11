@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS book, title_author, author, title, library_info;
+
 -- Lookup Table --
 CREATE TABLE library_info(
 	-- library is a keyword in SQL
@@ -21,7 +23,7 @@ CREATE TABLE title(
 	genre VARCHAR(255) NOT NULL,
 	-- subject is a keyword in SQL
 
-	year_published INT NOT NULL,
+	year_published INT NOT NULL
 );
 
 -- Lookup Table --
@@ -29,15 +31,15 @@ CREATE TABLE author(
 	author_id SERIAL PRIMARY KEY,
 	first_name VARCHAR(255),
 	middle_name VARCHAR(255),
-	last_name VARCHAR(255) NOT NULL,
+	last_name VARCHAR(255) NOT NULL
 );
 
 -- Join Table --
 CREATE TABLE title_author(
-	title_id INT NOT NULL,
-	author_id INT NOT NULL,
+	title_id INT NOT NULL REFERENCES title(title_id),
+	author_id INT NOT NULL REFERENCES author(author_id),
 	PRIMARY KEY (title_id, author_id)
-)
+);
 
 -- Join Table --
 CREATE TABLE book(
@@ -46,7 +48,7 @@ CREATE TABLE book(
 	-- genre + author_last + year_published + serial# = unique identifier for every single physical book
 
 	title_id INT NOT NULL REFERENCES title(title_id),
-	library_id INT NOT NULL REFERENCES biblioteca(library_id),
+	library_id INT NOT NULL REFERENCES library_info(library_id),
 
 	book_status VARCHAR(255) NOT NULL
 	-- book_status can be: {available, checkedOut, lost, overDue}

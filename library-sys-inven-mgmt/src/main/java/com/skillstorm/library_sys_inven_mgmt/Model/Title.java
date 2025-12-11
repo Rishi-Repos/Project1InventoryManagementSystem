@@ -2,6 +2,8 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -41,7 +43,8 @@ public class Title {
     private int yearPublished;
 
     @OneToMany(targetEntity = Book.class, mappedBy = "title")
-    private Set<Book> books;    
+    @JsonIgnore
+    private Set<Book> books; 
 
     @ManyToMany
     @JoinTable(name = "title_author",
@@ -59,6 +62,7 @@ public class Title {
         inverseJoinColumns=
             @JoinColumn(name="library_id")
     )
+    @JsonIgnore
     private Set<Library> libraries;
 
     /**

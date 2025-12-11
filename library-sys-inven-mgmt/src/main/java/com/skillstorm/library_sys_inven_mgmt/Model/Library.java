@@ -2,6 +2,8 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,40 +48,41 @@ public class Library {
         inverseJoinColumns=
             @JoinColumn(name="title_id")
     )
+    private Set<Title> titles;
 
     @OneToMany(targetEntity = Book.class, mappedBy = "library")
+    @JsonIgnore
     private Set<Book> books;
 
     /**
      * Below are: 
      *  Constructors - no args, all args except id, all args 
      *  getters, setters, hashCode, equals, toString - all attributes
+     *      - except there is no setId method!
      */
     
     public Library() {
     }
 
-    public Library(String name, String location, int maxCap, Set<Book> books) {
+    public Library(String name, String location, int maxCap, Set<Title> titles, Set<Book> books) {
         this.name = name;
         this.location = location;
         this.maxCap = maxCap;
+        this.titles = titles;
         this.books = books;
     }
 
-    public Library(int id, String name, String location, int maxCap, Set<Book> books) {
+    public Library(int id, String name, String location, int maxCap, Set<Title> titles, Set<Book> books) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.maxCap = maxCap;
+        this.titles = titles;
         this.books = books;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -106,6 +109,14 @@ public class Library {
         this.maxCap = maxCap;
     }
 
+    public Set<Title> getTitles() {
+        return titles;
+    }
+
+    public void setTitles(Set<Title> titles) {
+        this.titles = titles;
+    }
+
     public Set<Book> getBooks() {
         return books;
     }
@@ -122,6 +133,7 @@ public class Library {
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + maxCap;
+        result = prime * result + ((titles == null) ? 0 : titles.hashCode());
         result = prime * result + ((books == null) ? 0 : books.hashCode());
         return result;
     }
@@ -149,6 +161,11 @@ public class Library {
             return false;
         if (maxCap != other.maxCap)
             return false;
+        if (titles == null) {
+            if (other.titles != null)
+                return false;
+        } else if (!titles.equals(other.titles))
+            return false;
         if (books == null) {
             if (other.books != null)
                 return false;
@@ -159,7 +176,7 @@ public class Library {
 
     @Override
     public String toString() {
-        return "Library [id=" + id + ", name=" + name + ", location=" + location + ", maxCap=" + maxCap + ", books="
-                + books + "]";
+        return "Library [id=" + id + ", name=" + name + ", location=" + location + ", maxCap=" + maxCap + ", titles="
+                + titles + ", books=" + books + "]";
     }
 }

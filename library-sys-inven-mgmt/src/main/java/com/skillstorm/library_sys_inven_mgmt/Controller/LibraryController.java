@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
-import com.skillstorm.library_sys_inven_mgmt.Service.BookService;
 import com.skillstorm.library_sys_inven_mgmt.Service.LibraryService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,17 +22,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 @CrossOrigin("http://127.0.0.1:5500")
 public class LibraryController {
     
-    private final BookService bookService;
     private final LibraryService libraryService;
 
-    public LibraryController(LibraryService libraryService, BookService bookService){
+    public LibraryController(LibraryService libraryService){
         this.libraryService = libraryService;
-        this.bookService = bookService;
     }
 
     @GetMapping()
     public ResponseEntity<List<Library>> getAllLibraries() {
-        return new ResponseEntity<>(libraryService.findAllLibraries(), HttpStatus.OK);
+        try {
+            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
+            return new ResponseEntity<>(libraryService.findAllLibraries(), HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
+        
     }
 
     @PostMapping()

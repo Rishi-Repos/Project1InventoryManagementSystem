@@ -1,6 +1,7 @@
 package com.skillstorm.library_sys_inven_mgmt.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -20,6 +21,17 @@ public class LibraryService {
     //Persist a new library or update an existing one
     public Library saveLibrary(Library library){
         return libraryRepository.save(library);
+    }
+
+    public Library findLibraryById(int id){
+        Optional<Library> optLib = libraryRepository.findById(id);
+        if(optLib.isPresent()){
+            return optLib.get();
+        }
+        else{
+            throw new 
+        }
+        
     }
 
     //List all persisted libraries

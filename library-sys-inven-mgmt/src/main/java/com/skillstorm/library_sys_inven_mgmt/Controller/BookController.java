@@ -30,8 +30,8 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping()
-    public ResponseEntity<List<BookDto>> findAllBooksInLibrary(@RequestBody LibraryDto libraryDto){
+    @GetMapping("library/{id}")
+    public ResponseEntity<List<BookDto>> findAllBooksInLibrary(@RequestParam int libraryId){
         return new ResponseEntity<>(bookService.findAllBooksInLibrary(libraryDto), HttpStatus.OK);
     }
 

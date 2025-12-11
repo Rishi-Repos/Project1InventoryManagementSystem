@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +7,56 @@
     <!-- Favicon: https://realfavicongenerator.net/logo-maker/create-favicon -->
     <link rel="icon" type="image/x-icon" href="logo-32px.ico" sizes="32x32">
     <link rel="icon" type="image/x-icon" href="logo-16px.ico" sizes="16x16">
-    <!-- External CSS file-->
-     <link rel="stylesheet" href="css\style.css"/>
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-</head>
-<body>
-    <header>
-        <div class="site-header">
-            <img src="logolarge.png" alt="Site Logo" class="header-logo"/>
-            <h1>LibSIM</h1>
-        </div>
-        <h4 class="navbar">Library System Inventory Management</h4>
-    </header>
-    <main>
+    <!-- External CSS file-->
+    <link rel="stylesheet" href="css\style.css"/>
 
+    <script src="js\index.js" defer></script>
+</head>
+<body class="bg-light-subtle text-center">
+    <header class="bg-secondary border-bottom border-5">
+        <div class="container">
+            <div id="page-title">
+                <img style="height: 5vh; width: auto;" src="logo.svg" alt="Site Logo" class="rounded"/>
+                <h4 style="font-size: 5vh;" class="text-center"><b class="title-bold-text">Lib</b>rary <b class="title-bold-text">S</b>ystem <b class="title-bold-text">I</b>nventory <b class="title-bold-text">M</b>anager</h4>
+            </div>
+        </div>
+    </header>
+    <main style="margin-top: 5vh;">
+        <div class="container-fluid">
+            <!-- center the library table in this row-->
+            <div class="row justify-content-center">
+                
+                <!-- 
+                Library table column spacing:
+                    2 for edit & delete, 
+                  + 4 for name,
+                  + 4 for location,
+                  + 2 for currentCapacity
+                  = 6                                
+                -->
+                <!--For smaller screens, allow horizontal scrolling-->
+                <div class="col-lg-8 table-responsive">
+                    <table style="font-size: 2.5vh;" class="table table-dark table-hover table-bordered">
+                        <thead> <!--allow application of grid system to children-->
+                            <tr>
+                                <th>Libraries</th>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-2"></th>
+                                <th class="col-4">Name</th>
+                                <th class="col-4">City</th>
+                                <th class="col-2">Current Capacity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="library-table-body" class="table-group-divider">
+                            <!--Libraries added dynamically here-->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
     <footer>
 

@@ -32,11 +32,8 @@ public class LibraryController {
     @GetMapping()
     public ResponseEntity<List<Library>> getAllLibraries() {
         try {
-            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
             return new ResponseEntity<>(libraryService.findAllLibraries(), HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
     }
@@ -44,11 +41,8 @@ public class LibraryController {
     @GetMapping("dtos")
     public ResponseEntity<List<LibraryDto>> getAllLibraryDtos() {
         try {
-            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
             return new ResponseEntity<>(libraryService.findAllLibraryDtos(), HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println(e.getMessage());
-            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
     }

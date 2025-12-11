@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Service.LibraryService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +39,18 @@ public class LibraryController {
             System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
             return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
         }
-        
+    }
+
+    @GetMapping("dtos")
+    public ResponseEntity<List<LibraryDto>> getAllLibraryDtos() {
+        try {
+            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
+            return new ResponseEntity<>(libraryService.findAllLibraryDtos(), HttpStatus.OK);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            System.out.println(System.getenv("POSTGRES_SUPERUSER_PASSWORD"));
+            return ResponseEntity.internalServerError().header("message", e.getMessage()).build();
+        }
     }
 
     @PostMapping()

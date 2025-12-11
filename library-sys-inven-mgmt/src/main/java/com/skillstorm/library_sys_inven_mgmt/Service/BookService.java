@@ -2,9 +2,12 @@ package com.skillstorm.library_sys_inven_mgmt.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.library_sys_inven_mgmt.Dto.BookDto;
+import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
 import com.skillstorm.library_sys_inven_mgmt.Model.Author;
 import com.skillstorm.library_sys_inven_mgmt.Model.Book;
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
@@ -38,8 +41,8 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public List<Book> findAllBooksInLibrary(Library library){
-        return bookRepository.findByLibrary(library);
+    public List<BookDto> findAllBooksInLibrary(LibraryDto libraryDto){
+        return bookRepository.findByLibrary(LibraryDto.convertToLibrary(libraryDto)).stream().map(BookDto::convertToDto).collect(Collectors.toList());
     }
     
     //assign id before persisting to db

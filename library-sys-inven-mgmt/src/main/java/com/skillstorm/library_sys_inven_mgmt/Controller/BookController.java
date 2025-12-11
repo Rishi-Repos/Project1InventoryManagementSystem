@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.library_sys_inven_mgmt.Dto.BookDto;
+import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
 import com.skillstorm.library_sys_inven_mgmt.Model.Book;
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Service.BookService;
@@ -29,8 +31,8 @@ public class BookController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<Book>> findAllBooksInLibrary(@RequestBody Library library){
-        return new ResponseEntity<>(bookService.findAllBooksInLibrary(library), HttpStatus.OK);
+    public ResponseEntity<List<BookDto>> findAllBooksInLibrary(@RequestBody LibraryDto libraryDto){
+        return new ResponseEntity<>(bookService.findAllBooksInLibrary(libraryDto), HttpStatus.OK);
     }
 
     @PostMapping()

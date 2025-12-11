@@ -1,9 +1,11 @@
 package com.skillstorm.library_sys_inven_mgmt.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Repository.LibraryRepository;
 
@@ -23,6 +25,11 @@ public class LibraryService {
     //List all persisted libraries
     public List<Library> findAllLibraries(){
         return libraryRepository.findAll();
+    }
+
+    //List all persisted libraries without titles
+    public List<LibraryDto> findAllLibraryDtos(){
+        return libraryRepository.findAll().stream().map(LibraryDto::convertToDto).collect(Collectors.toList());
     }
 
     public void deleteLibrary(Library library){

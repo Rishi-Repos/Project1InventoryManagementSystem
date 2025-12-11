@@ -32,7 +32,6 @@ public class Book {
     @Column(name = "book_id")   
     private String id;
 
-
     @ManyToOne
     @JoinColumn(name = "title_id")
     private Title title;

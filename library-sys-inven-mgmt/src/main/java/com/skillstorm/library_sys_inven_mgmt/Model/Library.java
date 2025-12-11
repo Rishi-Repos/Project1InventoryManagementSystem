@@ -2,6 +2,7 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -50,9 +51,9 @@ public class Library {
     )
     private Set<Title> titles;
 
-    @OneToMany(targetEntity = Book.class, mappedBy = "library")
+    /* @OneToMany(targetEntity = Book.class, mappedBy = "library")
     @JsonIgnore
-    private Set<Book> books;
+    private Set<Book> books; */
 
     /**
      * Below are: 
@@ -64,21 +65,21 @@ public class Library {
     public Library() {
     }
 
-    public Library(String name, String location, int maxCap, Set<Title> titles, Set<Book> books) {
+    public Library(String name, String location, int maxCap, Set<Title> titles) {
         this.name = name;
         this.location = location;
         this.maxCap = maxCap;
         this.titles = titles;
-        this.books = books;
+        /* this.books = books; */
     }
 
-    public Library(int id, String name, String location, int maxCap, Set<Title> titles, Set<Book> books) {
+    public Library(int id, String name, String location, int maxCap, Set<Title> titles) {
         this.id = id;
         this.name = name;
         this.location = location;
         this.maxCap = maxCap;
         this.titles = titles;
-        this.books = books;
+        /* this.books = books; */
     }
 
     public int getId() {
@@ -117,13 +118,13 @@ public class Library {
         this.titles = titles;
     }
 
-    public Set<Book> getBooks() {
+    /* public Set<Book> getBooks() {
         return books;
     }
 
     public void setBooks(Set<Book> books) {
         this.books = books;
-    }
+    } */
 
     @Override
     public int hashCode() {
@@ -134,7 +135,7 @@ public class Library {
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + maxCap;
         result = prime * result + ((titles == null) ? 0 : titles.hashCode());
-        result = prime * result + ((books == null) ? 0 : books.hashCode());
+        /* result = prime * result + ((books == null) ? 0 : books.hashCode()); */
         return result;
     }
 
@@ -166,17 +167,17 @@ public class Library {
                 return false;
         } else if (!titles.equals(other.titles))
             return false;
-        if (books == null) {
+        /* if (books == null) {
             if (other.books != null)
                 return false;
         } else if (!books.equals(other.books))
-            return false;
+            return false; */
         return true;
     }
 
     @Override
     public String toString() {
         return "Library [id=" + id + ", name=" + name + ", location=" + location + ", maxCap=" + maxCap + ", titles="
-                + titles + ", books=" + books + "]";
+                + titles + /* ", books=" + books + */ "]";
     }
 }

@@ -2,7 +2,8 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+/* import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore; */
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,15 +39,15 @@ public class Author {
     @Column(name = "last_name")
     private String lastName;
 
-    @ManyToMany
+    /* @ManyToMany
     @JoinTable(name = "title_author",
         joinColumns=
             @JoinColumn(name="author_id"),
         inverseJoinColumns=
             @JoinColumn(name="title_id")
     )
-    @JsonIgnore
-    private Set<Title> titles;
+    @JsonBackReference
+    private Set<Title> titles; */
 
     /**
      * Below are: 
@@ -58,19 +59,19 @@ public class Author {
     public Author() {
     }
 
-    public Author(String firstName, String middleName, String lastName, Set<Title> titles) {
+    public Author(String firstName, String middleName, String lastName) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.titles = titles;
+        /* this.titles = titles; */
     }
 
-    public Author(int id, String firstName, String middleName, String lastName, Set<Title> titles) {
+    public Author(int id, String firstName, String middleName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
-        this.titles = titles;
+        /* this.titles = titles; */
     }
 
     public int getId() {
@@ -101,13 +102,13 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public Set<Title> getTitles() {
+    /* public Set<Title> getTitles() {
         return titles;
     }
 
     public void setTitles(Set<Title> titles) {
         this.titles = titles;
-    }
+    } */
 
     @Override
     public int hashCode() {
@@ -117,7 +118,7 @@ public class Author {
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((middleName == null) ? 0 : middleName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((titles == null) ? 0 : titles.hashCode());
+        /* result = prime * result + ((titles == null) ? 0 : titles.hashCode()); */
         return result;
     }
 
@@ -147,17 +148,17 @@ public class Author {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (titles == null) {
+        /* if (titles == null) {
             if (other.titles != null)
                 return false;
         } else if (!titles.equals(other.titles))
-            return false;
+            return false; */
         return true;
     }
 
     @Override
     public String toString() {
         return "Author [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName=" + lastName
-                + ", titles=" + titles + "]";
+                /* + ", titles=" + titles */ + "]";
     }    
 }

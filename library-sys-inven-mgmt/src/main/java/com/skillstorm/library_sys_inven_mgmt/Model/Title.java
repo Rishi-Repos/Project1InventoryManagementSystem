@@ -2,6 +2,7 @@ package com.skillstorm.library_sys_inven_mgmt.Model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -42,9 +43,9 @@ public class Title {
     @Column(name = "year_published")
     private int yearPublished;
 
-    @OneToMany(targetEntity = Book.class, mappedBy = "title")
-    @JsonIgnore
-    private Set<Book> books; 
+/*     @OneToMany(targetEntity = Book.class, mappedBy = "title")
+    @JsonBackReference
+    private Set<Book> books;  */
 
     @ManyToMany
     @JoinTable(name = "title_author",
@@ -55,15 +56,15 @@ public class Title {
     )
     private Set<Author> authors;
 
-    @ManyToMany
+/*     @ManyToMany
     @JoinTable(name = "book",
         joinColumns=
             @JoinColumn(name="title_id"),
         inverseJoinColumns=
             @JoinColumn(name="library_id")
     )
-    @JsonIgnore
-    private Set<Library> libraries;
+    @JsonBackReference
+    private Set<Library> libraries; */
 
     /**
      * Below are: 
@@ -75,25 +76,23 @@ public class Title {
     public Title() {
     }
 
-    public Title(String title, String genre, int yearPublished, Set<Book> books, Set<Author> authors,
-            Set<Library> libraries) {
+    public Title(String title, String genre, int yearPublished, Set<Author> authors) {
         this.title = title;
         this.genre = genre;
         this.yearPublished = yearPublished;
-        this.books = books;
+/*         this.books = books; */
         this.authors = authors;
-        this.libraries = libraries;
+/*         this.libraries = libraries; */
     }
 
-    public Title(int id, String title, String genre, int yearPublished, Set<Book> books, Set<Author> authors,
-            Set<Library> libraries) {
+    public Title(int id, String title, String genre, int yearPublished, Set<Author> authors) {
         this.id = id;
         this.title = title;
         this.genre = genre;
         this.yearPublished = yearPublished;
-        this.books = books;
+        /* this.books = books; */
         this.authors = authors;
-        this.libraries = libraries;
+        /* this.libraries = libraries; */
     }
 
     public int getId() {
@@ -124,14 +123,14 @@ public class Title {
         this.yearPublished = yearPublished;
     }
 
-    public Set<Book> getBooks() {
+    /* public Set<Book> getBooks() {
         return books;
     }
 
     public void setBooks(Set<Book> books) {
         this.books = books;
     }
-
+ */
     public Set<Author> getAuthors() {
         return authors;
     }
@@ -140,13 +139,13 @@ public class Title {
         this.authors = authors;
     }
 
-    public Set<Library> getLibraries() {
+   /*  public Set<Library> getLibraries() {
         return libraries;
     }
 
     public void setLibraries(Set<Library> libraries) {
         this.libraries = libraries;
-    }
+    } */
 
     @Override
     public int hashCode() {
@@ -156,9 +155,9 @@ public class Title {
         result = prime * result + ((title == null) ? 0 : title.hashCode());
         result = prime * result + ((genre == null) ? 0 : genre.hashCode());
         result = prime * result + yearPublished;
-        result = prime * result + ((books == null) ? 0 : books.hashCode());
+        /* result = prime * result + ((books == null) ? 0 : books.hashCode()); */
         result = prime * result + ((authors == null) ? 0 : authors.hashCode());
-        result = prime * result + ((libraries == null) ? 0 : libraries.hashCode());
+        /* result = prime * result + ((libraries == null) ? 0 : libraries.hashCode()); */
         return result;
     }
 
@@ -185,27 +184,27 @@ public class Title {
             return false;
         if (yearPublished != other.yearPublished)
             return false;
-        if (books == null) {
+        /* if (books == null) {
             if (other.books != null)
                 return false;
         } else if (!books.equals(other.books))
-            return false;
+            return false; */
         if (authors == null) {
             if (other.authors != null)
                 return false;
         } else if (!authors.equals(other.authors))
             return false;
-        if (libraries == null) {
+        /* if (libraries == null) {
             if (other.libraries != null)
                 return false;
         } else if (!libraries.equals(other.libraries))
-            return false;
+            return false; */
         return true;
     }
 
     @Override
     public String toString() {
         return "Title [id=" + id + ", title=" + title + ", genre=" + genre + ", yearPublished=" + yearPublished
-                + ", books=" + books + ", authors=" + authors + ", libraries=" + libraries + "]";
+                /* + ", books=" + books */ + ", authors=" + authors /* + ", libraries=" + libraries */ + "]";
     }
 }

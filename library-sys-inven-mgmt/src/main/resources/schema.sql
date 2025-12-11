@@ -49,7 +49,7 @@ CREATE TABLE book(
 	library_id INT NOT NULL REFERENCES biblioteca(library_id),
 
 	book_status VARCHAR(255) NOT NULL
-	-- book_status can be: {available, checked out, lost, overdue}
+	-- book_status can be: {available, checkedOut, lost, overDue}
 	-- status is a keyword in SQL
 );
 

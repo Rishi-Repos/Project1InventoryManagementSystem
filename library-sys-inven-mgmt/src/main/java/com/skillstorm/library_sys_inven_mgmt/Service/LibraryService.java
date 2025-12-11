@@ -15,8 +15,8 @@ public class LibraryService {
         this.libraryRepository = libraryRepository;
     }
 
-    //Persist a new library
-    public Library addLibrary(Library library){
+    //Persist a new library or update an existing one
+    public Library saveLibrary(Library library){
         return libraryRepository.save(library);
     }
 
@@ -25,9 +25,8 @@ public class LibraryService {
         return libraryRepository.findAll();
     }
 
-    public Library updateLibrary(Library library){
-        return libraryRepository.save(library);
+    public void deleteLibrary(Library library){
+        libraryRepository.delete(library);
     }
-
 
 }

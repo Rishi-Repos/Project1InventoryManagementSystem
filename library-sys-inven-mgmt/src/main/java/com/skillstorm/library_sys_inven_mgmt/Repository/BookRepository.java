@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.skillstorm.library_sys_inven_mgmt.Model.Book;
+import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Model.Title;
 
 import java.util.List;
@@ -13,5 +14,7 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book,String>{
 
     List<Book> findByTitle(Title title);
+
+    List<Book> findByLibrary(Library library);
     
 }

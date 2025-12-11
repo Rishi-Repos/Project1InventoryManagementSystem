@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LibrarySysInvenMgmtApplication<library-sys-inven-mgmt>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.skillstorm.library_sys_inven_mgmt.LibrarySysInvenMgmtApplication",
+            "projectName": "library-sys-inven-mgmt",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

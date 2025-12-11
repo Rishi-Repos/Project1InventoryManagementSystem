@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.tomcat.jni.LibraryNotFoundError;
 import org.springframework.stereotype.Service;
 
 import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
+import com.skillstorm.library_sys_inven_mgmt.Exception.LibraryNotFoundException;
 import com.skillstorm.library_sys_inven_mgmt.Model.Library;
 import com.skillstorm.library_sys_inven_mgmt.Repository.LibraryRepository;
 
@@ -23,15 +25,13 @@ public class LibraryService {
         return libraryRepository.save(library);
     }
 
-    public Library findLibraryById(int id){
+    public Library findLibraryById(int id) throws LibraryNotFoundException{
         Optional<Library> optLib = libraryRepository.findById(id);
         if(optLib.isPresent()){
             return optLib.get();
+        } else{
+            throw new LibraryNotFoundException("No library by id " + id);
         }
-        else{
-            throw new 
-        }
-        
     }
 
     //List all persisted libraries

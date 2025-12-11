@@ -3,30 +3,28 @@ let allBooks = [];
 let allLibraries = [];
 
 //when page is loaded/refreshed
-document.addEventListener('DOMContentLoaded', getAllLibsRequest());
-
-async function getAllLibsRequest() {
-    let returnedData = await fetch(URL + '/libraries/dtos', {
+document.addEventListener('DOMContentLoaded', () => {
+    fetch(URL + '/libraries/dtos', {
         method : 'GET'      
-    });
-    let libraries = await returnedData.json();
+    })
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+    .then((libraries) => {
+        libraries.forEach(newLibraryDto => {
+            addLibraryToTable(newLibraryDto);
+        });
 
-    libraries.forEach(newLibraryDto => {
-        addLibraryToTable(newLibraryDto);
-    });
-}
-
-async function getAllBooksByLibRequest(libraryDto) {
-    let returnedData = await fetch(URL + '/books', {
-        method : 'GET',
-        headers : {
-            'Content-Type' : 'application/json'
-        },
-        body : JSON.stringify(libraryDto)      
-    });
-    let books = await returnedData.json();
-    return books;
-}
+        // add a row at the bottom of the table for adding a new Library
+        const addLibRow = document.createElement('tr');
+        addLibRow.innerHTML = '<td></td><td></td><td></td>';
+        document.getElementById('tr'+libraries.at(-1).id).after() 
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    })
+});
 
 function addLibraryToTable(newLibraryDto) {
 
@@ -35,16 +33,28 @@ function addLibraryToTable(newLibraryDto) {
     let location = document.createElement('td');
     let currCap = document.createElement('td');
     let buttonColumn = document.createElement('td');
-    let buttonContainer = document.createElement('div');  //Edit and delete buttons here
+    let buttonContainer = document.createElement('div');  // Edit and delete buttons live here
     let editImg = document.createElement('img');
     let deleteImg = document.createElement('img');
 
     name.innerText = newLibraryDto.name;
     location.innerText = newLibraryDto.location;
-    
-    //calculate current capacity
-    currCap.innerText = '' + (parseInt(getAllBooksByLibRequest(newLibraryDto).length) / parseInt(newLibraryDto.maxCap));
 
+    // calculate and populate current capacity
+    fetch(URL + '/books/library/' + newLibraryDto.id, {
+        method : 'GET'      
+    })
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+    .then((booksinLib) => {
+        currCap.innerText = booksinLib.length + ' / ' + newLibraryDto.maxCap;
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    })
+    
     buttonContainer.setAttribute('class','edit-delete-container')
     editImg.setAttribute('src','edit.png');
     deleteImg.setAttribute('src','delete.png');

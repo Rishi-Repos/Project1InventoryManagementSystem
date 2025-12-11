@@ -41,8 +41,9 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public List<BookDto> findAllBooksInLibrary(LibraryDto libraryDto){
-        return bookRepository.findByLibrary(LibraryDto.convertToLibrary(libraryDto)).stream().map(BookDto::convertToDto).collect(Collectors.toList());
+    public List<BookDto> findAllBooksInLibrary(Library library){
+        //convert list of books to list of bookDto's
+        return bookRepository.findByLibrary(library).stream().map(BookDto::convertToDto).collect(Collectors.toList());
     }
     
     //assign id before persisting to db

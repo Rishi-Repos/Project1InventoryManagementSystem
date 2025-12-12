@@ -128,13 +128,13 @@ function displayAddLibraryForm(){
     addLibraryForm.setAttribute('class','d-flex');
     addLibraryForm.innerHTML =                                    
         `<td class="col-4">
-            <input id="new-library-name" name="new-library-name" class="form-control" type="text" placeholder="Enter Library Name">
+            <input id="new-library-name" name="new-library-name" class="form-control" type="text" placeholder="Enter Library Name" required>
         </td>
         <td class="col-4">
-            <input id="new-library-location" name="new-library-location" class="form-control" type="text" placeholder="Enter Library Location">
+            <input id="new-library-location" name="new-library-location" class="form-control" type="text" placeholder="Enter Library Location" required>
         </td>
         <td class="col-2">
-            <input id="new-library-maxCap" name="new-library-maxCap" class="form-control" type="number" placeholder="Enter Max Capacity">
+            <input id="new-library-maxCap" name="new-library-maxCap" class="form-control" type="number" placeholder="Enter Max Capacity" required>
         </td>
         <td class="col-2" style="justify-content: space-evenly;">
             <input id="save-library" name="save-button" type="submit" value="Save" class="btn btn-primary me-3"/>    
@@ -395,8 +395,11 @@ function deleteLibraryInTable(deleteLibraryDto) {
 function addLibraryRowEventListeners() {
     const rows = document.querySelectorAll('tr');
     rows.forEach(row => {
-        row.addEventListener('dblclick', () => {
-            openBookTable(row);
+        row.addEventListener('dblclick', (event) => {
+            // ensure that a tr was clicked
+            if(event.target.closest('tr')){
+                openBookTable(row);
+            }
         });
     });
 }

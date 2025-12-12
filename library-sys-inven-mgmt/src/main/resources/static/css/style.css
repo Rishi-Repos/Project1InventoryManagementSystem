@@ -30,6 +30,9 @@
     height: 3vh;
     width: auto;
 }
-#edit-library-form, #delete-library-form{
+#new-book-form{
+    margin-top: 5vh;
+}
+#edit-library-form, #delete-library-form, #new-book-form{
     display: none;
 }

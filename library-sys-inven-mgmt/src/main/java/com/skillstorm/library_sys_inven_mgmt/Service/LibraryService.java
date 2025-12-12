@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.tomcat.jni.LibraryNotFoundError;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 

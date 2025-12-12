@@ -40,17 +40,9 @@
     </header>
     <main style="margin-top: 5vh;">
         <div id="dashboard" class="container-fluid">
+            <!-- LIBRARY TABLE -->
             <!-- center the library table in this row-->
             <div class="row justify-content-center">
-                
-                <!-- 
-                Library table column spacing:
-                    2 for edit & delete, 
-                  + 4 for name,
-                  + 4 for location,
-                  + 2 for currentCapacity
-                  = 6                                
-                -->
                 <!--For smaller screens, allow horizontal scrolling-->
                 <div class="col-lg-8 table-responsive">
                     <form id="new-library-form" action="#">
@@ -74,7 +66,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <!--EDIT LIBRARY FORM--> 
+                <!-- EDIT LIBRARY FORM --> 
                 <div class="col-lg-8 table-responsive">
                     <form id="edit-library-form" action="#">
                         <table style="font-size: 2.5vh;" class="table table-dark table-hover table-bordered">
@@ -99,7 +91,7 @@
                 </div>
             </div>
             <div class="row justify-content-center">
-                <!--DELETE LIBRARY CONFIRMATION--> 
+                <!-- DELETE LIBRARY CONFIRMATION --> 
                 <div class="col-lg-8 table-responsive">
                     <form id="delete-library-form" action="#">
                         <table style="font-size: 2.5vh;" class="table table-dark table-bordered"> <!--removed table-hover for the delete message-->
@@ -119,6 +111,36 @@
                                     <button id="cancel-delete-button" name="cancel-delete-button" class="btn btn-secondary">Cancel</button> 
                                 </td>
                             </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <!-- BOOK TABLE -->
+            <!-- center the book table in this row-->
+            <div class="row justify-content-center">
+                <!--For smaller screens, allow horizontal scrolling-->
+                <div class="col-lg-10 table-responsive">
+                    <form id="new-book-form" action="#">
+                        <table style="font-size: 2.5vh;" class="table table-dark table-hover table-bordered">
+                            <thead> 
+                                <tr class="d-flex">
+                                    <th id="book-table-title" style="font-size: 3.5vh;" class="col-11">Books Added to Library</th>
+                                    <th class="col-1">
+                                        <button id="close-books-button" name="close-books-button" class="btn btn-secondary ">Close</button>
+                                    </th>
+                                </tr>
+                                <tr id="book-table-header" class="d-flex">
+                                    <th class="col-2">Title</th>
+                                    <th class="col-2">Author</th>
+                                    <th class="col-2">Genre</th>
+                                    <th class="col-2">Pub. Year</th>
+                                    <th class="col-2">Status</th>
+                                    <th class="col-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="library-table-body" class="table-group-divider">
+                                <!--Libraries added to table dynamically here-->
+                            </tbody>
                         </table>
                     </form>
                 </div>

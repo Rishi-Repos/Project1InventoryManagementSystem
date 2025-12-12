@@ -34,15 +34,92 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     // add hover and click event listeners for every edit and delete button
+    // add double-click event listener for every row in library table
     .then(() => {
         addEditEventListeners();
         addDeleteEventListeners();
+        addLibraryRowEventListeners();
     })
     .catch((error) => {
         // handle all 400 and 500 status code responses
         console.error(error);
     })
 });
+
+function addLibraryToTable(newLibraryDto) {
+
+    let tr = document.createElement('tr');
+    let name = document.createElement('td');
+    let location = document.createElement('td');
+    let currCap = document.createElement('td');
+    let buttonColumn = document.createElement('td');
+    let buttonContainer = document.createElement('div');  // Edit and delete buttons live here
+    let editImg = document.createElement('img');
+    let deleteImg = document.createElement('img');
+
+    name.innerText = newLibraryDto.name;
+    location.innerText = newLibraryDto.location;
+
+    // calculate and populate current capacity
+    fetch(URL + '/books/library/' + newLibraryDto.id, {
+        method : 'GET'      
+    })
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+    .then((booksinLib) => {
+        currCap.innerText = booksinLib.length + ' / ' + newLibraryDto.maxCap;
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    })
+    // apply flex to the container for the buttons
+    buttonContainer.setAttribute('class','edit-delete-container')
+
+    // linking source files
+    editImg.setAttribute('src','edit.png');
+    deleteImg.setAttribute('src','delete.png');
+
+    // apply styling to edit and delete images
+    editImg.setAttribute('class','edit-button');
+    deleteImg.setAttribute('class','delete-button');
+
+    // add tooltips to each image
+    editImg.setAttribute('title','Edit Row');
+    deleteImg.setAttribute('title','Delete Row');
+
+    // add row id unique for library table
+    tr.setAttribute('id', 'trLib' + newLibraryDto.id);
+    editImg.setAttribute('id', 'editLib' + newLibraryDto.id);
+    deleteImg.setAttribute('id', 'deleteLib' + newLibraryDto.id);
+    // manage spacing of columns
+    tr.setAttribute('class','d-flex');
+    buttonColumn.setAttribute('class','col-2');
+    name.setAttribute('class','col-4');
+    location.setAttribute('class','col-4');
+    currCap.setAttribute('class','col-2');
+
+    // build row structure
+    tr.appendChild(name);
+    tr.appendChild(location);
+    tr.appendChild(currCap);
+    tr.appendChild(buttonColumn);
+    buttonColumn.appendChild(buttonContainer);
+    buttonContainer.appendChild(editImg);
+    buttonContainer.appendChild(deleteImg);
+
+    // add row to library table
+    document.getElementById('library-table-body').appendChild(tr);
+
+    // add/re-add all event listeners for rows, edit, and delete buttons
+    addEditEventListeners();
+    addDeleteEventListeners();
+    addLibraryRowEventListeners();
+
+    // append to array
+    allLibraries.push(newLibraryDto);
+}
 
 // add a row after last row in library table containing a form to add a library
 function displayAddLibraryForm(){
@@ -158,12 +235,6 @@ function editLibraryRow(editElement) {
     document.getElementById('delete-library-form').style.display = 'none';
 }
 
-document.getElementById('cancel-delete-button').addEventListener('click', (event) =>{
-    event.preventDefault();
-    document.getElementById('delete-library-form').style.display = 'none';
-});
-
-
 // called when edit form is submitted
 document.getElementById('edit-library-form').addEventListener('submit', (event) =>{
     event.preventDefault();
@@ -266,6 +337,12 @@ function deleteLibraryRow(deleteElement) {
     document.getElementById('delete-library-form').style.display = 'block';
 }
 
+// called when cancel button is clicked
+document.getElementById('cancel-delete-button').addEventListener('click', (event) =>{
+    event.preventDefault();
+    document.getElementById('delete-library-form').style.display = 'none';
+});
+
 // called when delete message is confirmed
 document.getElementById('delete-library-form').addEventListener('submit', (event) =>{
     event.preventDefault();
@@ -311,6 +388,70 @@ function deleteLibraryInTable(deleteLibraryDto) {
     document.getElementById('delete-library-form').reset();
 }
 
+/////////////////////////////
+////// OPEN BOOK TABLE //////
+/////////////////////////////
+
+function addLibraryRowEventListeners() {
+    const rows = document.querySelectorAll('tr');
+    rows.forEach(row => {
+        row.addEventListener('dblclick', () => {
+            openBookTable(row);
+        });
+    });
+}
+
+function openBookTable(row) {
+    
+    fetch(URL + '/books/library/' + parseInt(row.id.replace(/\D/g, '')), {
+        method : 'GET'      
+    })
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+    .then((booksinLib) => {
+        booksinLib.forEach(newBookDto => {
+            addBookToTable(newBookDto);
+        });
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    })
+    
+    //show table
+    document.getElementById('new-book-form').style.display = 'block';
+
+}
+
+function addBookToTable(newBookDto) {
+    let tr = document.createElement('tr');
+    tr.setAttribute('class','d-flex');
+    tr.innerHTML = `
+    <td class="col-2">${newBookDto.title.title}</td>
+    <td class="col-2">${newBookDto.title.authors[0].firstName + " " 
+        + newBookDto.title.authors[0].middleName + " "
+        + newBookDto.title.authors[0].lastName}</td>
+    <td class="col-2">${newBookDto.title.genre}</td>
+    <td class="col-2">${newBookDto.title.yearPublished}</td>
+    <td class="col-2">${newBookDto.status}</td>
+    <td class="col-2">
+        <div class="edit-delete-container">
+            <img src="edit.png" class="edit-button" title="Edit Row" id="editBook${newBookDto.id}">
+            <img src="delete.png" class="delete-button" title="Delete Row" id="deleteBook${newBookDto.id}">
+        </div>
+    </td>
+    `;
+    document.getElementById('book-table-header').after(tr);
+    
+}
+
+// called when cancel button is clicked
+document.getElementById('close-books-button').addEventListener('click', (event) =>{
+    event.preventDefault();
+    document.getElementById('new-book-form').style.display = 'none';
+});
+
 // when click on "Dashboard":
 document.getElementById('dashboard-nav').addEventListener('click',() =>{
     document.getElementById('dashboard').style.display = 'block';
@@ -325,76 +466,5 @@ document.getElementById('adv-search-nav').addEventListener('click',() =>{
     document.getElementById('dashboard').style.display = 'none';
 });
 
-function addLibraryToTable(newLibraryDto) {
 
-    let tr = document.createElement('tr');
-    let name = document.createElement('td');
-    let location = document.createElement('td');
-    let currCap = document.createElement('td');
-    let buttonColumn = document.createElement('td');
-    let buttonContainer = document.createElement('div');  // Edit and delete buttons live here
-    let editImg = document.createElement('img');
-    let deleteImg = document.createElement('img');
 
-    name.innerText = newLibraryDto.name;
-    location.innerText = newLibraryDto.location;
-
-    // calculate and populate current capacity
-    fetch(URL + '/books/library/' + newLibraryDto.id, {
-        method : 'GET'      
-    })
-    .then((returnedData) => {
-        return returnedData.json();
-    })
-    .then((booksinLib) => {
-        currCap.innerText = booksinLib.length + ' / ' + newLibraryDto.maxCap;
-    })
-    .catch((error) => {
-        // handle all 400 and 500 status code responses
-        console.error(error);
-    })
-    // apply flex to the container for the buttons
-    buttonContainer.setAttribute('class','edit-delete-container')
-
-    // linking source files
-    editImg.setAttribute('src','edit.png');
-    deleteImg.setAttribute('src','delete.png');
-
-    // apply styling to edit and delete images
-    editImg.setAttribute('class','edit-button');
-    deleteImg.setAttribute('class','delete-button');
-
-    // add tooltips to each image
-    editImg.setAttribute('title','Edit Row');
-    deleteImg.setAttribute('title','Delete Row');
-
-    // add row id unique for library table
-    tr.setAttribute('id', 'trLib' + newLibraryDto.id);
-    editImg.setAttribute('id', 'editLib' + newLibraryDto.id);
-    deleteImg.setAttribute('id', 'deleteLib' + newLibraryDto.id);
-    // manage spacing of columns
-    tr.setAttribute('class','d-flex');
-    buttonColumn.setAttribute('class','col-2');
-    name.setAttribute('class','col-4');
-    location.setAttribute('class','col-4');
-    currCap.setAttribute('class','col-2');
-
-    // build row structure
-    tr.appendChild(name);
-    tr.appendChild(location);
-    tr.appendChild(currCap);
-    tr.appendChild(buttonColumn);
-    buttonColumn.appendChild(buttonContainer);
-    buttonContainer.appendChild(editImg);
-    buttonContainer.appendChild(deleteImg);
-
-    // add row to library table
-    document.getElementById('library-table-body').appendChild(tr);
-
-    // add event listeners for new row
-    addEditEventListeners();
-    addDeleteEventListeners();
-
-    // append to array
-    allLibraries.push(newLibraryDto);
-}

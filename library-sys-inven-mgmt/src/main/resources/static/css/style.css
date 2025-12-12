@@ -23,7 +23,7 @@
     align-items: end;
     padding-right: 1vw;
 }
-.edit-delete-buttons{
+.edit-button, .delete-button{
     height: 3vh;
     width: auto;
 }

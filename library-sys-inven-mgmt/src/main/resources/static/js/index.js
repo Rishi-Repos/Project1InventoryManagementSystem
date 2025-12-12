@@ -27,11 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
         at the bottom of the table for adding a new Library */
     .then((libraries) => {
         
-        const addLibRow = document.createElement('tr');
-        addLibRow.innerHTML = '<td></td><td></td><td></td>';
+        const addLibraryForm = displayAddLibraryForm();
 
         // locate last row in table and add element after
-        document.getElementById('trLib' + libraries.at(-1).id).after() 
+        document.getElementById('trLib' + libraries.at(-1).id).after(addLibraryForm);
     })
 
     // add hover and click event listeners for every edit and delete button
@@ -45,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 });
 
+// add hover and click event listeners for every delete button, called by the 'DOMContentLoaded' event listener
 function addDeleteEventListeners() {
     const elements = document.querySelectorAll('.delete-button');
         elements.forEach(element => {
@@ -60,6 +60,7 @@ function addDeleteEventListeners() {
         });
 }
 
+// add hover and click event listeners for every edit button, called by the 'DOMContentLoaded' event listener
 function addEditEventListeners() {
     const elements = document.querySelectorAll('.edit-button');
         elements.forEach(element => {
@@ -75,8 +76,86 @@ function addEditEventListeners() {
         });
 }
 
+// add a row after last row in library table containing a form to add a library
+function displayAddLibraryForm(){
+    const addLibraryForm = document.createElement('tr');
+    addLibraryForm.setAttribute('id','add-library-form-row')
+    addLibraryForm.setAttribute('class','d-flex');
+    addLibraryForm.innerHTML =                                    
+        `<td class="col-4">
+            <input id="new-library-name" name="new-library-name" class="form-control" type="text" placeholder="Enter Library Name">
+        </td>
+        <td class="col-4">
+            <input id="new-library-location" name="new-library-location" class="form-control" type="text" placeholder="Enter Library Location">
+        </td>
+        <td class="col-2">
+            <input id="new-library-maxCap" name="new-library-maxCap" class="form-control" type="number" placeholder="Enter Max Capacity">
+        </td>
+        <td class="col-2" style="justify-content: space-evenly;">
+            <input id="save-library" name="save-button" type="submit" value="Save" class="btn btn-primary me-3" />    
+            <button id="new-library-cancel-button" class="btn btn-danger">Cancel</button>
+        </td>`;
+    return addLibraryForm;
+}
+
+////////////////////////////////
+//////// POST LIBRARY //////////
+////////////////////////////////
+
+document.getElementById('new-library-form').addEventListener('submit', (event) =>{
+    event.preventDefault();
+    let inputData = new FormData(document.getElementById('new-library-form'));
+    let newLibraryDto = {
+        name : inputData.get('new-library-name'),         
+        location : inputData.get('new-library-location'),
+        maxCap : inputData.get('new-library-maxCap')
+    };
+    postLibrary(newLibraryDto);
+});
+
+function postLibrary(newLibraryDto) {
+    fetch(URL + '/libraries', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'         // make sure your server is expecting to receive JSON in the body
+        },
+        body : JSON.stringify(newLibraryDto)      // turns a js object into JSON
+    })
+
+    // convert JSON to js object
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+
+    // add data to visible library table
+    .then((newLibraryDto) => {
+        addLibraryToTable(newLibraryDto);
+        return newLibraryDto;
+    })
+
+    // remove the addLibraryForm row (no longer at the bottom)
+    .then((newLibraryDto) => {
+        document.getElementById('add-library-form-row').remove();
+        return newLibraryDto;
+    })
+
+    // re-add the addLibraryForm row to the bottom
+    .then((newLibraryDto) => {
+        const addLibraryForm = displayAddLibraryForm();
+
+        // locate last row in table and add element after
+        document.getElementById('trLib' + newLibraryDto.id).after(addLibraryForm);
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    });
+}
+
 function editLibraryRow(editElement) {
-    console.log(editElement);
+    fetch(URL + '/libraries/dtos', {
+        method : 'PUT'      
+    })
 }
 
 function deleteLibraryRow(deleteElement) {
@@ -152,10 +231,10 @@ function addLibraryToTable(newLibraryDto) {
     currCap.setAttribute('class','col-2');
 
     // build row structure
-    tr.appendChild(buttonColumn);
     tr.appendChild(name);
     tr.appendChild(location);
     tr.appendChild(currCap);
+    tr.appendChild(buttonColumn);
     buttonColumn.appendChild(buttonContainer);
     buttonContainer.appendChild(editImg);
     buttonContainer.appendChild(deleteImg);

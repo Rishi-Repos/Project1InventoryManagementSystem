@@ -29,7 +29,7 @@
                         </a>
                     </div>
                     <div id="dashboard-nav" class="col-lg-2 align-self-center">
-                        <a class="nav-link active" aria-current="page" href="#">Libraries</a>
+                        <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
                     </div>
                     <div id="adv-search-nav" class="col-lg-2 align-self-center">
                         <a class="nav-link" href="#">Advanced Search</a>
@@ -53,30 +53,24 @@
                 -->
                 <!--For smaller screens, allow horizontal scrolling-->
                 <div class="col-lg-8 table-responsive">
-                    <table style="font-size: 2.5vh;" class="table table-dark table-hover table-bordered">
-                        <thead> <!--allow application of grid system to children-->
-                            <tr>
-                                <th>Libraries</th>
-                            </tr>
-                            <tr class="d-flex">
-                                <th class="col-2"></th>
-                                <th class="col-4">Name</th>
-                                <th class="col-4">Location</th>
-                                <th class="col-2">Current Capacity</th>
-                            </tr>
-                        </thead>
-                        <tbody id="library-table-body" class="table-group-divider">
-                            <!--Libraries added dynamically here-->
-                            <tr class="d-flex">
-                                <td class="col-2 text-end" style="padding-right: 1vw;">Add Library:</td>
-                                <td class="col-10">
-                                    <form id="new-library-form" action="#">
-
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <form id="new-library-form" action="#">
+                        <table style="font-size: 2.5vh;" class="table table-dark table-hover table-bordered">
+                            <thead> 
+                                <tr>
+                                    <th style="font-size: 3.5vh;">Libraries</th>
+                                </tr>
+                                <tr class="d-flex">
+                                    <th class="col-4">Name</th>
+                                    <th class="col-4">Location</th>
+                                    <th class="col-2">Current Capacity</th>
+                                    <th class="col-2"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="library-table-body" class="table-group-divider">
+                                <!--Libraries added to table dynamically here-->
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
             </div>
         </div>

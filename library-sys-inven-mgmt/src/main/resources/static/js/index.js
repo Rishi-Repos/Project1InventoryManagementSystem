@@ -44,38 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 });
 
-// add hover and click event listeners for every delete button, called by the 'DOMContentLoaded' event listener
-function addDeleteEventListeners() {
-    const elements = document.querySelectorAll('.delete-button');
-        elements.forEach(element => {
-            element.addEventListener('mouseenter', () =>{
-                element.style.filter = 'invert(100%) hue-rotate(120deg)';
-            })
-            element.addEventListener('mouseleave', () =>{
-                element.style.filter = 'invert(0%) hue-rotate(0deg)';
-            })
-            element.addEventListener('click', () => {
-                deleteLibraryRow(element);
-            });
-        });
-}
-
-// add hover and click event listeners for every edit button, called by the 'DOMContentLoaded' event listener
-function addEditEventListeners() {
-    const elements = document.querySelectorAll('.edit-button');
-        elements.forEach(element => {
-            element.addEventListener('mouseenter', () =>{
-                element.style.filter = 'saturate(800%)';
-            })
-            element.addEventListener('mouseleave', () =>{
-                element.style.filter = 'saturate(100%)';
-            })
-            element.addEventListener('click', () => {
-                editLibraryRow(element);
-            });
-        });
-}
-
 // add a row after last row in library table containing a form to add a library
 function displayAddLibraryForm(){
     const addLibraryForm = document.createElement('tr');
@@ -92,8 +60,7 @@ function displayAddLibraryForm(){
             <input id="new-library-maxCap" name="new-library-maxCap" class="form-control" type="number" placeholder="Enter Max Capacity">
         </td>
         <td class="col-2" style="justify-content: space-evenly;">
-            <input id="save-library" name="save-button" type="submit" value="Save" class="btn btn-primary me-3" />    
-            <button id="new-library-cancel-button" class="btn btn-danger">Cancel</button>
+            <input id="save-library" name="save-button" type="submit" value="Save" class="btn btn-primary me-3"/>    
         </td>`;
     return addLibraryForm;
 }
@@ -113,11 +80,12 @@ document.getElementById('new-library-form').addEventListener('submit', (event) =
     postLibrary(newLibraryDto);
 });
 
+// send POST request to server and update view
 function postLibrary(newLibraryDto) {
     fetch(URL + '/libraries', {
         method : 'POST',
         headers : {
-            'Content-Type' : 'application/json'         // make sure your server is expecting to receive JSON in the body
+            'Content-Type' : 'application/json'         
         },
         body : JSON.stringify(newLibraryDto)      // turns a js object into JSON
     })
@@ -152,14 +120,195 @@ function postLibrary(newLibraryDto) {
     });
 }
 
+////////////////////////////////
+//////// EDIT LIBRARY //////////
+////////////////////////////////
+
+// add hover and click event listeners for every edit button, called by the 'DOMContentLoaded' event listener
+function addEditEventListeners() {
+    const elements = document.querySelectorAll('.edit-button');
+        elements.forEach(element => {
+            element.addEventListener('mouseenter', () =>{
+                element.style.filter = 'saturate(800%)';
+            })
+            element.addEventListener('mouseleave', () =>{
+                element.style.filter = 'saturate(100%)';
+            })
+            element.addEventListener('click', () => {
+                editLibraryRow(element);
+            });
+        });
+}
+
+// called when editImg is clicked
 function editLibraryRow(editElement) {
-    fetch(URL + '/libraries/dtos', {
-        method : 'PUT'      
+    
+    // identify the row
+    // the replace method here removes everything but numbers from the string
+    let libraryDto = allLibraries.find(library => library.id === parseInt(editElement.id.replace(/\D/g, '')));    
+
+    // pre-populate edit form with current values
+    document.getElementById('edit-library-name').setAttribute('value', libraryDto.name);
+    document.getElementById('edit-library-location').setAttribute('value', libraryDto.location);
+    document.getElementById('edit-library-maxCap').setAttribute('value', libraryDto.maxCap);
+    document.getElementById('edit-library').setAttribute('data-id', libraryDto.id);
+
+    // show form
+    document.getElementById('edit-library-form').style.display = 'block';
+    document.getElementById('delete-library-form').style.display = 'none';
+}
+
+document.getElementById('cancel-delete-button').addEventListener('click', (event) =>{
+    event.preventDefault();
+    document.getElementById('delete-library-form').style.display = 'none';
+});
+
+
+// called when edit form is submitted
+document.getElementById('edit-library-form').addEventListener('submit', (event) =>{
+    event.preventDefault();
+    let inputData = new FormData(document.getElementById('edit-library-form'));
+    let editedLibraryDto = {
+        id : document.getElementById('edit-library').dataset.id,
+        name : inputData.get('edit-library-name'),         
+        location : inputData.get('edit-library-location'),
+        maxCap : inputData.get('edit-library-maxCap')
+    };
+    putLibrary(editedLibraryDto);
+});
+
+// send PUT request to server
+function putLibrary(editedLibraryDto) {
+    
+    fetch(URL + '/libraries', {
+        method : 'PUT',
+        headers : {
+            'Content-Type' : 'application/json'         
+        },
+        body : JSON.stringify(editedLibraryDto)      // turns a js object into JSON
     })
+
+    // convert JSON to js object
+    .then((returnedData) => {
+        return returnedData.json();
+    })
+
+    // add data to visible library table
+    .then((editedLibraryDto) => {
+        updateLibraryInTable(editedLibraryDto);
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    });
+}
+
+function updateLibraryInTable(editedLibraryDto) {
+    
+    document.getElementById('trLib' + editedLibraryDto.id).innerHTML = `
+    <td class="col-4">${editedLibraryDto.name}</td>
+    <td class="col-4">${editedLibraryDto.location}</td>
+    <td class="col-2">${editedLibraryDto.maxCap}</td>
+    <td class="col-2">
+        <div class="edit-delete-container">
+            <img src="edit.png" class="edit-button" title="Edit Row" id="editLib${editedLibraryDto.id}">
+            <img src="delete.png" class="delete-button" title="Delete Row" id="deleteLib${editedLibraryDto.id}">
+        </div>
+    </td>
+    `;
+
+    //re-add event listeners after re-adding edit and delete buttons
+
+    addEditEventListeners();
+    addDeleteEventListeners();
+
+    // hide form
+    document.getElementById('edit-library-form').style.display = 'none';
+
+    // reset form
+    document.getElementById('edit-library-form').reset();
+}
+
+////////////////////////////////
+//////// DELETE LIBRARY ////////
+////////////////////////////////
+
+// add hover and click event listeners for every delete button, called by the 'DOMContentLoaded' event listener
+function addDeleteEventListeners() {
+    const elements = document.querySelectorAll('.delete-button');
+        elements.forEach(element => {
+            element.addEventListener('mouseenter', () =>{
+                element.style.filter = 'invert(100%) hue-rotate(120deg)';
+            })
+            element.addEventListener('mouseleave', () =>{
+                element.style.filter = 'invert(0%) hue-rotate(0deg)';
+            })
+            element.addEventListener('click', () => {
+                deleteLibraryRow(element);
+            });
+        });
 }
 
 function deleteLibraryRow(deleteElement) {
-    console.log(deleteElement);
+    
+    // identify the row
+    // the replace method here removes everything but numbers from the string
+    let libraryDto = allLibraries.find(library => library.id === parseInt(deleteElement.id.replace(/\D/g, '')));    
+
+    // pre-populate delete message with current values
+    document.getElementById('delete-library-name').setAttribute('value', libraryDto.name);
+    document.getElementById('delete-library-location').setAttribute('value', libraryDto.location);
+    document.getElementById('delete-library-maxCap').setAttribute('value', libraryDto.maxCap);
+    document.getElementById('delete-library').setAttribute('data-id', libraryDto.id);
+
+    // show form
+    document.getElementById('edit-library-form').style.display = 'none';
+    document.getElementById('delete-library-form').style.display = 'block';
+}
+
+// called when delete message is confirmed
+document.getElementById('delete-library-form').addEventListener('submit', (event) =>{
+    event.preventDefault();
+    let inputData = new FormData(document.getElementById('delete-library-form'));
+    let deleteLibraryDto = {
+        id : document.getElementById('delete-library').dataset.id,
+        name : inputData.get('delete-library-name'),         
+        location : inputData.get('delete-library-location'),
+        maxCap : inputData.get('delete-library-maxCap')
+    };
+    deleteLibrary(deleteLibraryDto);
+});
+
+// send DELETE request to server
+function deleteLibrary(deleteLibraryDto) {
+    
+    fetch(URL + '/libraries', {
+        method : 'DELETE',
+        headers : {
+            'Content-Type' : 'application/json'         
+        },
+        body : JSON.stringify(deleteLibraryDto)      // turns a js object into JSON
+    })
+
+    // add data to visible library table
+    .then(() => {
+        deleteLibraryInTable(deleteLibraryDto);
+    })
+    .catch((error) => {
+        // handle all 400 and 500 status code responses
+        console.error(error);
+    });
+}
+
+// delete library in the view
+function deleteLibraryInTable(deleteLibraryDto) {
+    document.getElementById('trLib' + deleteLibraryDto.id).remove();
+
+    // hide form
+    document.getElementById('delete-library-form').style.display = 'none';
+
+    // reset form
+    document.getElementById('delete-library-form').reset();
 }
 
 // when click on "Dashboard":
@@ -241,6 +390,10 @@ function addLibraryToTable(newLibraryDto) {
 
     // add row to library table
     document.getElementById('library-table-body').appendChild(tr);
+
+    // add event listeners for new row
+    addEditEventListeners();
+    addDeleteEventListeners();
 
     // append to array
     allLibraries.push(newLibraryDto);

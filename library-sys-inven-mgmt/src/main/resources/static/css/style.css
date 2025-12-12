@@ -30,3 +30,6 @@
     height: 3vh;
     width: auto;
 }
+#edit-library-form, #delete-library-form{
+    display: none;
+}

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.tomcat.jni.LibraryNotFoundError;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.skillstorm.library_sys_inven_mgmt.Dto.LibraryDto;
@@ -36,12 +37,12 @@ public class LibraryService {
 
     //List all persisted libraries
     public List<Library> findAllLibraries(){
-        return libraryRepository.findAll();
+        return libraryRepository.findAll(Sort.by("id"));
     }
 
     //List all persisted libraries without titles
     public List<LibraryDto> findAllLibraryDtos(){
-        return libraryRepository.findAll().stream().map(LibraryDto::convertToDto).collect(Collectors.toList());
+        return libraryRepository.findAll(Sort.by("id")).stream().map(LibraryDto::convertToDto).collect(Collectors.toList());
     }
 
     public void deleteLibrary(Library library){

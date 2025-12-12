@@ -2,7 +2,7 @@ const URL = 'http://localhost:8080';
 let allBooks = [];
 let allLibraries = [];
 
-//when page is loaded/refreshed
+// when page is loaded/refreshed:
 document.addEventListener('DOMContentLoaded', () => {
     fetch(URL + '/libraries/dtos', {
         method : 'GET'      
@@ -18,12 +18,28 @@ document.addEventListener('DOMContentLoaded', () => {
         // add a row at the bottom of the table for adding a new Library
         const addLibRow = document.createElement('tr');
         addLibRow.innerHTML = '<td></td><td></td><td></td>';
-        document.getElementById('tr'+libraries.at(-1).id).after() 
+
+        // locate last row in table and add element after
+        document.getElementById('trLib' + libraries.at(-1).id).after() 
     })
     .catch((error) => {
         // handle all 400 and 500 status code responses
         console.error(error);
     })
+});
+
+// when click on "Dashboard":
+document.getElementById('dashboard-nav').addEventListener('click',() =>{
+    document.getElementById('dashboard').style.display = 'block';
+});
+
+// when click on "Advanced Search":
+document.getElementById('adv-search-nav').addEventListener('click',() =>{
+    document.getElementById('dashboard').style.display = 'none';
+});
+
+document.getElementById('adv-search-nav').addEventListener('click',() =>{
+    document.getElementById('dashboard').style.display = 'none';
 });
 
 function addLibraryToTable(newLibraryDto) {
@@ -54,19 +70,32 @@ function addLibraryToTable(newLibraryDto) {
         // handle all 400 and 500 status code responses
         console.error(error);
     })
-    
+    // apply flex to the container for the buttons
     buttonContainer.setAttribute('class','edit-delete-container')
+
+    // linking source files
     editImg.setAttribute('src','edit.png');
     deleteImg.setAttribute('src','delete.png');
+
+    // apply styling to edit and delete images
     editImg.setAttribute('class','edit-delete-buttons');
     deleteImg.setAttribute('class','edit-delete-buttons');
-    tr.setAttribute('id', 'tr' + newLibraryDto.id);
+
+    // add tooltips to each image
+    editImg.setAttribute('title','Edit Row');
+    deleteImg.setAttribute('title','Delete Row');
+
+    // add row id unique for library table
+    tr.setAttribute('id', 'trLib' + newLibraryDto.id);
+
+    // manage spacing of columns
     tr.setAttribute('class','d-flex');
     buttonColumn.setAttribute('class','col-2');
     name.setAttribute('class','col-4');
     location.setAttribute('class','col-4');
     currCap.setAttribute('class','col-2');
 
+    // build row structure
     tr.appendChild(buttonColumn);
     tr.appendChild(name);
     tr.appendChild(location);
@@ -75,7 +104,9 @@ function addLibraryToTable(newLibraryDto) {
     buttonContainer.appendChild(editImg);
     buttonContainer.appendChild(deleteImg);
 
+    // add row to library table
     document.getElementById('library-table-body').appendChild(tr);
 
+    // append to array
     allLibraries.push(newLibraryDto);
 }

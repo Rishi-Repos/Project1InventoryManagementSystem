@@ -1,13 +1,20 @@
-#page-title{
-    padding-top: 2vh; 
+#page-title-container{
+    padding-top: 2vh;
+    padding-left: 8vh; 
+    padding-right: 20vh;
     display: flex; 
     justify-content: center;
     align-items: center; 
-    gap: 4vh;
-    margin-bottom: 1vh;
+    gap: 2vh;
 }
 .title-bold-text{
     font-weight: 700;
+}
+#dashboard-nav{
+    font-size: 2vh;
+}
+#adv-search-nav{
+    font-size: 2vh;
 }
 .edit-delete-container{
     display: flex; 
